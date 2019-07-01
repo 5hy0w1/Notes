@@ -38,6 +38,13 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.notes_list.itemClicked.connect(self.set_current_note)
         self.new_button.clicked.connect(self.new_note)
         self.del_button.clicked.connect(self.del_note)
+        self.italicButton.clicked.connect(lambda: self.setTextStyle("Italic"))
+        self.boldButton.clicked.connect(lambda: self.setTextStyle("Bold"))
+        self.underButton.clicked.connect(lambda: self.setTextStyle("Under"))
+        self.fontsizeSpinBox.valueChanged.connect(lambda x: self.setTextStyle({"size":x}))
+        self.fontSelector.currentFontChanged.connect(lambda x: self.setTextStyle({"family":x}))
+        self.markedList.clicked.connect(lambda: self.addList(-1))
+        self.numList.clicked.connect(lambda: self.addList(-4))
         self.get_notes()
 
     def del_note(self, b):
@@ -60,11 +67,12 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def save_note(self):
         with open(self.note.path, 'w') as file:
-            text = self.textEdit.toPlainText()
+            text = self.textEdit.toHtml()
             file.write(text)
 
     def show_note(self, note):
-        self.textEdit.setPlainText(note.text)
+        self.textEdit.setCurrentCharFormat(QtGui.QTextCharFormat())
+        self.textEdit.setText(note.text)
 
     def load_note(self, path):
         name = os.path.basename(path)
@@ -84,6 +92,30 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                                    path=path))'''
             self.notes_list.addItem(QtWidgets.QListWidgetItem(name))
             self.load_note(path)
+
+    def setTextStyle(self, style):
+        cursor = self.textEdit.textCursor()
+        char_format = cursor.charFormat()
+        if cursor.hasSelection():
+            if style == "Italic":
+                char_format.setFontItalic(not char_format.fontItalic())
+            elif style == "Bold":
+                char_format.setFontWeight(300 if char_format.fontWeight() == 700 else 700)
+            elif style == "Under":
+                char_format.setFontUnderline(not char_format.fontUnderline())
+            elif style.get("size"):
+                char_format.setFontPointSize(style["size"])
+            elif style.get("family"):
+                char_format.setFontFamily(style["family"].family())
+
+        cursor.setCharFormat(char_format)
+        #else cursor.add:
+
+    def addList(self, style):
+        cursor = self.textEdit.textCursor()
+        qlist = QtGui.QTextListFormat()
+        qlist.setStyle(style)
+        cursor.createList(qlist)
 
 
 def main():
