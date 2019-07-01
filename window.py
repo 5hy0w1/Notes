@@ -1,0 +1,96 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'window.ui'
+#
+# Created by: PyQt5 UI code generator 5.11.3
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit.setObjectName("textEdit")
+        #self.textEdit.setLineWrapMode(QtGui.WidgetWrap)
+        self.textEdit.setUndoRedoEnabled(True)
+        self.textEdit.setAcceptRichText(True)
+        self.verticalLayout.addWidget(self.textEdit)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+        self.sidebar = QtWidgets.QDockWidget(MainWindow)
+        self.sidebar.setFloating(False)
+        self.sidebar.setFeatures(QtWidgets.QDockWidget.DockWidgetFloatable)
+        self.sidebar.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)
+        self.sidebar.setObjectName("sidebar")
+        self.sidebar_content = QtWidgets.QWidget()
+        self.sidebar_content.setObjectName("sidebar_content")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.sidebar_content)
+        self.verticalLayout_2.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setSpacing(0)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.notes_list = QtWidgets.QListWidget(self.sidebar_content)
+        self.notes_list.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.notes_list.setObjectName("notes_list")
+        self.verticalLayout_2.addWidget(self.notes_list)
+        self.buttons_layout = QtWidgets.QHBoxLayout()
+        self.buttons_layout.setContentsMargins(10, -1, -1, -1)
+        self.buttons_layout.setSpacing(12)
+        self.buttons_layout.setObjectName("buttons_layout")
+        self.new_button = QtWidgets.QToolButton(self.sidebar_content)
+        self.new_button.setMaximumSize(QtCore.QSize(25, 25))
+        self.new_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.new_button.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("/home/5hy0w1/notes/plus.png").scaled(20,20), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.new_button.setIcon(icon)
+        self.new_button.setIconSize(QtCore.QSize(20, 20))
+        self.new_button.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+        self.new_button.setAutoRaise(True)
+        self.new_button.setObjectName("new_button")
+        self.buttons_layout.addWidget(self.new_button)
+        self.del_button = QtWidgets.QToolButton(self.sidebar_content)
+        self.del_button.setMaximumSize(QtCore.QSize(25, 25))
+        self.del_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.del_button.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("/home/5hy0w1/notes/minus.png").scaled(20,20), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.del_button.setIcon(icon1)
+        self.del_button.setIconSize(QtCore.QSize(20, 20))
+        self.del_button.setAutoRaise(True)
+        self.del_button.setObjectName("del_button")
+        self.buttons_layout.addWidget(self.del_button)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.buttons_layout.addItem(spacerItem)
+        self.verticalLayout_2.addLayout(self.buttons_layout)
+        self.sidebar.setWidget(self.sidebar_content)
+        MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(1), self.sidebar)
+        self.toolBar = QtWidgets.QToolBar(MainWindow)
+        self.toolBar.setObjectName("toolBar")
+        MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        __sortingEnabled = self.notes_list.isSortingEnabled()
+        self.notes_list.setSortingEnabled(False)
+        #item = self.notes_list.item(0)
+        #item.setText(_translate("MainWindow", "Новый элемент"))
+        self.notes_list.setSortingEnabled(__sortingEnabled)
+        self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
+
+# #import res_rc
