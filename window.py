@@ -10,7 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+        MainWindow.setObjectName("Notes - Заметки")
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -88,15 +88,18 @@ class Ui_MainWindow(object):
         # # Font settings
         self.fontSelector = QtWidgets.QFontComboBox()
         self.boldButton = QtWidgets.QToolButton()
+        self.boldButton.setCheckable(True)
         self.boldButton.setText("B")
         self.boldButton.setStyleSheet("font-weight: 700;font-size: 20px;")
         self.boldButton.setMinimumSize(QtCore.QSize(35, 35))
         self.italicButton = QtWidgets.QToolButton()
         self.italicButton.setText("I")
+        self.italicButton.setCheckable(True)
         self.italicButton.setMinimumSize(QtCore.QSize(35, 35))
         self.italicButton.setStyleSheet("font-size: 20px; font-style: italic;")
         self.underButton = QtWidgets.QToolButton()
         self.underButton.setText("U")
+        self.underButton.setCheckable(True)
         self.underButton.setStyleSheet("font-size: 20px; text-decoration: underline;")
         self.fontsizeSpinBox = QtWidgets.QSpinBox()
         self.fontsizeSpinBox.setValue(12)
@@ -130,7 +133,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Notes - Заметки"))
         __sortingEnabled = self.notes_list.isSortingEnabled()
         self.notes_list.setSortingEnabled(False)
         #item = self.notes_list.item(0)

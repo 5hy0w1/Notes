@@ -41,17 +41,28 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.italicButton.clicked.connect(lambda: self.setTextStyle("Italic"))
         self.boldButton.clicked.connect(lambda: self.setTextStyle("Bold"))
         self.underButton.clicked.connect(lambda: self.setTextStyle("Under"))
-        self.fontsizeSpinBox.valueChanged.connect(lambda x: self.setTextStyle({"size":x}))
-        self.fontSelector.currentFontChanged.connect(lambda x: self.setTextStyle({"family":x}))
+        self.fontsizeSpinBox.valueChanged.connect(lambda x: self.setTextStyle({"size": x}))
+        self.fontSelector.currentFontChanged.connect(lambda x: self.setTextStyle({"family": x}))
+        self.textEdit.currentCharFormatChanged.connect(self.change_styles)
         self.markedList.clicked.connect(lambda: self.addList(-1))
         self.numList.clicked.connect(lambda: self.addList(-4))
         self.get_notes()
 
+    def change_styles(self, data):
+        self.italicButton.setChecked(data.fontItalic())
+        self.fontsizeSpinBox.setValue(data.fontPointSize())
+        self.underButton.setChecked(data.fontUnderline())
+        print(data.fontWeight())
+        self.boldButton.setChecked(1 if data.fontWeight() > 50 else 0)
+        self.fontSelector.setCurrentFont(QtGui.QFont(data.fontFamily()))
+
     def del_note(self, b):
-        path = os.path.join(standart_note_path, self.note.name)
-        os.remove(path)
         for item in self.notes_list.selectedItems():
-            self.notes_list.takeItem(self.notes_list.row(item))
+            name = self.notes_list.takeItem(self.notes_list.row(item)).text()
+            # #print(dir(name))
+            path = os.path.join(standart_note_path, name)
+            # #print(path)
+            os.remove(path)
 
     def set_current_note(self, item):
         p = os.path.join(standart_note_path, item.text())
@@ -66,19 +77,27 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.notes_list.addItem(QtWidgets.QListWidgetItem(note_name))
 
     def save_note(self):
+        if not self.note:
+            name, ok = QtWidgets.QInputDialog.getText(self, "Введите название заметки", "Название:")
+            path = os.path.join(standart_note_path, name)
+            self.note = Note("", name, path)
+            self.notes.append(self.note)
+            self.notes_list.addItem(QtWidgets.QListWidgetItem(self.note.name))
         with open(self.note.path, 'w') as file:
             text = self.textEdit.toHtml()
+            print(text)
             file.write(text)
 
     def show_note(self, note):
         self.textEdit.setCurrentCharFormat(QtGui.QTextCharFormat())
-        self.textEdit.setText(note.text)
+        self.textEdit.setHtml(note.text)
+        #print(self.textEdit.toHtml())
 
     def load_note(self, path):
         name = os.path.basename(path)
         with open(path) as file:
             text = file.read()
-        print(type(Note()))
+        # #print(type(Note()))
         self.note = Note(text, name, path)
         # #self.show_note(self.note)
 
@@ -95,21 +114,22 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setTextStyle(self, style):
         cursor = self.textEdit.textCursor()
+        cursor.setKeepPositionOnInsert(True)
         char_format = cursor.charFormat()
-        if cursor.hasSelection():
-            if style == "Italic":
-                char_format.setFontItalic(not char_format.fontItalic())
-            elif style == "Bold":
-                char_format.setFontWeight(300 if char_format.fontWeight() == 700 else 700)
-            elif style == "Under":
-                char_format.setFontUnderline(not char_format.fontUnderline())
-            elif style.get("size"):
-                char_format.setFontPointSize(style["size"])
-            elif style.get("family"):
-                char_format.setFontFamily(style["family"].family())
+        if style == "Italic":
+            char_format.setFontItalic(not char_format.fontItalic())
+        elif style == "Bold":
+            char_format.setFontWeight(50 if char_format.fontWeight() >= 99 else 99)
+        elif style == "Under":
+            char_format.setFontUnderline(not char_format.fontUnderline())
+        elif style.get("size"):
+            char_format.setFontPointSize(style["size"])
+        elif style.get("family"):
+            char_format.setFontFamily(style["family"].family())
 
+        if not cursor.hasSelection():
+            cursor.insertFragment(QtGui.QTextDocumentFragment())
         cursor.setCharFormat(char_format)
-        #else cursor.add:
 
     def addList(self, style):
         cursor = self.textEdit.textCursor()
