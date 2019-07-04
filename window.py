@@ -85,6 +85,9 @@ class Ui_MainWindow(object):
         self.alignRightButton.setText("R")
         self.alignCenterButton = QtWidgets.QToolButton()
         self.alignCenterButton.setText("C")
+        self.alignLeftButton.setCheckable(True)
+        self.alignRightButton.setCheckable(True)
+        self.alignCenterButton.setCheckable(True)
         # # Font settings
         self.fontSelector = QtWidgets.QFontComboBox()
         self.boldButton = QtWidgets.QToolButton()
@@ -114,8 +117,8 @@ class Ui_MainWindow(object):
         self.markedList.setMinimumSize(QtCore.QSize(35, 35))
 
         self.toolBar.addWidget(self.alignLeftButton)
-        self.toolBar.addWidget(self.alignRightButton)
         self.toolBar.addWidget(self.alignCenterButton)
+        self.toolBar.addWidget(self.alignRightButton)
         self.toolBar.addSeparator()
         self.toolBar.addWidget(self.boldButton)
         self.toolBar.addWidget(self.italicButton)

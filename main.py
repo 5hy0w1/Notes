@@ -1,11 +1,25 @@
 import sys
 import os.path
+import PyQt5
+from pathlib import Path
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication
 from window import Ui_MainWindow
 
 
-standart_note_path = os.path.abspath("/home/5hy0w1/notes/Notes")
+standart_note_path = os.path.join(Path().home(), "Notes", "note_files")
+
+
+def check_path(path):
+    if not os.path.exists(path):
+        levels = path.split(os.path.sep)
+        p = '/' if not levels[0] else levels[0]
+        for l in levels[1:]:
+            p = os.path.join(p, l)
+            if not os.path.exists(p):
+                os.mkdir(p)
+                print(p)
+            print(os.path.exists(p))
 
 
 class Note(QtWidgets.QListWidgetItem):
@@ -44,11 +58,47 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         self.fontsizeSpinBox.valueChanged.connect(lambda x: self.setTextStyle({"size": x}))
         self.fontSelector.currentFontChanged.connect(lambda x: self.setTextStyle({"family": x}))
         self.textEdit.currentCharFormatChanged.connect(self.change_styles)
+        #self.textEdit.cursorPositionChanged.connect(self.change_styles)
         self.markedList.clicked.connect(lambda: self.addList(-1))
         self.numList.clicked.connect(lambda: self.addList(-4))
+        self.alignLeftButton.clicked.connect(lambda: self.setAligment('l'))
+        self.alignCenterButton.clicked.connect(lambda: self.setAligment('c'))
+        self.alignRightButton.clicked.connect(lambda: self.setAligment('r'))
+        self.textEdit.cursorPositionChanged.connect(self.check_aligment)
         self.get_notes()
 
+    def check_aligment(self):
+        cursor = self.textEdit.textCursor()
+        fmt = cursor.blockFormat()
+        alignment = fmt.alignment()
+        if alignment == QtCore.Qt.AlignLeft:
+            self.alignLeftButton.setChecked(True)
+            self.alignRightButton.setChecked(False)
+            self.alignCenterButton.setChecked(False)
+        elif alignment == QtCore.Qt.AlignRight:
+            self.alignLeftButton.setChecked(False)
+            self.alignRightButton.setChecked(True)
+            self.alignCenterButton.setChecked(False)
+        elif alignment == QtCore.Qt.AlignCenter:
+            self.alignLeftButton.setChecked(False)
+            self.alignRightButton.setChecked(False)
+            self.alignCenterButton.setChecked(True)
+
+
+    def setAligment(self,aligment):
+        cursor = self.textEdit.textCursor()
+        block_format = QtGui.QTextBlockFormat()
+        if aligment == 'l':
+            block_format.setAlignment(QtCore.Qt.AlignLeft)
+        elif aligment == 'c':
+            block_format.setAlignment(QtCore.Qt.AlignCenter)
+        elif aligment == 'r':
+            block_format.setAlignment(QtCore.Qt.AlignRight)
+
+        block = cursor.setBlockFormat(block_format)
+
     def change_styles(self, data):
+        #data = self.textEdit.textCursor().blockCharFormat()
         self.italicButton.setChecked(data.fontItalic())
         self.fontsizeSpinBox.setValue(data.fontPointSize())
         self.underButton.setChecked(data.fontUnderline())
@@ -65,6 +115,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             os.remove(path)
 
     def set_current_note(self, item):
+        #self.save_note()
         p = os.path.join(standart_note_path, item.text())
         self.load_note(p)
         self.show_note(self.note)
@@ -75,6 +126,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
                                    name=note_name,
                                    path=os.path.join(standart_note_path, note_name)))
             self.notes_list.addItem(QtWidgets.QListWidgetItem(note_name))
+        #self.load_note(self.notes[0].path)
 
     def save_note(self):
         if not self.note:
@@ -89,9 +141,12 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             file.write(text)
 
     def show_note(self, note):
-        self.textEdit.setCurrentCharFormat(QtGui.QTextCharFormat())
+        fmt = QtGui.QTextCharFormat()
+        fmt.setFontFamily("Arial")
+        fmt.setFontPointSize(12)
+        self.textEdit.setCurrentCharFormat(fmt)
         self.textEdit.setHtml(note.text)
-        #print(self.textEdit.toHtml())
+        # #print(self.textEdit.toHtml())
 
     def load_note(self, path):
         name = os.path.basename(path)
@@ -114,22 +169,34 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setTextStyle(self, style):
         cursor = self.textEdit.textCursor()
-        cursor.setKeepPositionOnInsert(True)
+        cursor.setKeepPositionOnInsert(False)
         char_format = cursor.charFormat()
-        if style == "Italic":
-            char_format.setFontItalic(not char_format.fontItalic())
-        elif style == "Bold":
-            char_format.setFontWeight(50 if char_format.fontWeight() >= 99 else 99)
-        elif style == "Under":
-            char_format.setFontUnderline(not char_format.fontUnderline())
-        elif style.get("size"):
-            char_format.setFontPointSize(style["size"])
-        elif style.get("family"):
-            char_format.setFontFamily(style["family"].family())
-
-        if not cursor.hasSelection():
-            cursor.insertFragment(QtGui.QTextDocumentFragment())
-        cursor.setCharFormat(char_format)
+        if cursor.hasSelection():
+            if style == "Italic":
+                char_format.setFontItalic(not char_format.fontItalic())
+            elif style == "Bold":
+                char_format.setFontWeight(50 if char_format.fontWeight() >= 99 else 99)
+            elif style == "Under":
+                char_format.setFontUnderline(not char_format.fontUnderline())
+            elif style.get("size"):
+                char_format.setFontPointSize(style["size"])
+            elif style.get("family"):
+                char_format.setFontFamily(style["family"].family())
+            cursor.setCharFormat(char_format)
+        '''else:
+            span = "<span style=\"{}\">1</span>"
+            if style == "Italic":
+                span = span.format("")
+            elif style == "Bold":
+                span = span.format("")
+            elif style == "Under":
+                span = span.format("text-decoration: underline;")
+            elif style.get("size"):
+                span = span.format("")
+            elif style.get("family"):
+                span = span.format("")
+            cursor.insertHtml(span)'''
+        
 
     def addList(self, style):
         cursor = self.textEdit.textCursor()
@@ -139,6 +206,7 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
 def main():
+    check_path(standart_note_path)
     app = QApplication(sys.argv)
     window = Window()
     window.show()
