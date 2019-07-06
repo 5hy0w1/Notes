@@ -22,6 +22,7 @@ Notes поддерживает разметку, вы можете:
 | *I*| Курсивное начертание  |
 | <img src="" width="20" height="20">| Подчеркнутое начертание  |
 | <img src="https://cdn2.iconfinder.com/data/icons/text-editing-1/100/text_editing-12-512.png" width="20" height="20">| Выравнивание по левому краю  |
-| <img src="https://cdn2.iconfinder.com/data/icons/text-editing-1/100/text_editing-12-512.png" width="20" height="20" style="transform: scale(-1, 1)">| Выравнивание по правому краю  |
+| <img src="https://static.thenounproject.com/png/96219-200.png" width="20" height="20">| Выравнивание по правому краю  |
 | <img src="http://freevector.co/wp-content/uploads/2010/07/24389-paragraph-center-alignment1.png" width="20" height="20">| Выравнивание по центру  |
-| <img src="" width="20" height="20">|   |
+| <img src="https://i.ibb.co/ccFwmPk/2019-07-06-22-57-48.png" width="20" height="20">| Нумированный список  |
+| <img src="https://i.ibb.co/w08wvBY/2019-07-06-22-59-59.png" width="20" height="20">| Маркированный список  |
