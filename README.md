@@ -1,4 +1,4 @@
-# Notes
+# Notes `(В разработке)`
 ![Notes preview](https://i.ibb.co/6ZtRZdf/Notes-window.png)
 # Описание
 Notes - Это ваш менеджер заметок, написанный на Python. Здесь вы можете создавать, редактировать и удалять заметки. 
