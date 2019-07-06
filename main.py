@@ -10,12 +10,18 @@ from window import Ui_MainWindow
 
 standart_note_path = os.path.join(Path().home(), "Notes", "note_files")
 standart_file_path = os.path.join(Path().home(), "Notes")
+main_script_path = os.path.split(os.path.abspath(__file__))[0]
 
 
 def check_path(path):
     if not os.path.exists(path):
         levels = path.split(os.path.sep)
-        p = '/' if not levels[0] else levels[0]
+        if not levels[0]:
+            p = '/'
+        elif levels[0].endswith(":"):
+            p = levels[0] + os.path.sep
+        else:
+            p = levels[0]
         for l in levels[1:]:
             p = os.path.join(p, l)
             if not os.path.exists(p):
@@ -221,7 +227,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             self.del_button
         ]
         for p, b in zip(pathes, buttons):
-            b.setIcon(QtGui.QIcon(p))
+            print(os.path.join(main_script_path, p))
+            b.setIcon(QtGui.QIcon(os.path.join(main_script_path.split()[0], p)))
 
 
 def make_usercfg(cfg_path):
