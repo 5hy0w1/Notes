@@ -232,18 +232,18 @@ def make_usercfg(cfg_path):
         }
         json.dump(cfg, cfg_file)
 
+
 def main():
     global standart_note_path
     global standart_file_path
+
     cfg_path = os.path.join(standart_file_path, "user.cfg")
-    if not os.path.exists(standart_file_path):
-        check_path(standart_file_path)
-        check_path(standart_note_path)
+    check_path(standart_file_path)
+    check_path(standart_note_path)
     if not os.path.exists(os.path.join(standart_file_path, "user.cfg")):
         make_usercfg(cfg_path)
-    else:
-        with open(cfg_path) as cfg_file:
-            cfg = json.load(cfg_file)
+    with open(cfg_path) as cfg_file:
+        cfg = json.load(cfg_file)
     standart_note_path = cfg["note_path"]
     standart_file_path = cfg["file_path"]
 
