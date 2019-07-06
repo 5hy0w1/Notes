@@ -1,6 +1,7 @@
 import sys
 import os.path
-import PyQt5
+# #import PyQt5
+import json
 from pathlib import Path
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication
@@ -8,6 +9,7 @@ from window import Ui_MainWindow
 
 
 standart_note_path = os.path.join(Path().home(), "Notes", "note_files")
+standart_file_path = os.path.join(Path().home(), "Notes")
 
 
 def check_path(path):
@@ -94,8 +96,8 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             block_format.setAlignment(QtCore.Qt.AlignCenter)
         elif aligment == 'r':
             block_format.setAlignment(QtCore.Qt.AlignRight)
-
         block = cursor.setBlockFormat(block_format)
+        self.check_aligment()
 
     def change_styles(self, data):
         #data = self.textEdit.textCursor().blockCharFormat()
@@ -196,7 +198,6 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
             elif style.get("family"):
                 span = span.format("")
             cursor.insertHtml(span)'''
-        
 
     def addList(self, style):
         cursor = self.textEdit.textCursor()
@@ -204,11 +205,51 @@ class Window(QtWidgets.QMainWindow, Ui_MainWindow):
         qlist.setStyle(style)
         cursor.createList(qlist)
 
+    def setIcons(self):
+        pathes = [
+            "center-alignment.png",
+            "right-alignment.png",
+            "left-alignment.png",
+            "plus.png",
+            "minus.png"
+        ]
+        buttons = [
+            self.alignCenterButton,
+            self.alignRightButton,
+            self.alignLeftButton,
+            self.new_button,
+            self.del_button
+        ]
+        for p, b in zip(pathes, buttons):
+            b.setIcon(QtGui.QIcon(p))
+
+
+def make_usercfg(cfg_path):
+    with open(cfg_path, "w") as cfg_file:
+        cfg = {
+            "note_path": standart_note_path,
+            "file_path": standart_file_path
+        }
+        json.dump(cfg, cfg_file)
 
 def main():
-    check_path(standart_note_path)
+    global standart_note_path
+    global standart_file_path
+    cfg_path = os.path.join(standart_file_path, "user.cfg")
+    if not os.path.exists(standart_file_path):
+        check_path(standart_file_path)
+        check_path(standart_note_path)
+    if not os.path.exists(os.path.join(standart_file_path, "user.cfg")):
+        make_usercfg(cfg_path)
+    else:
+        with open(cfg_path) as cfg_file:
+            cfg = json.load(cfg_file)
+    standart_note_path = cfg["note_path"]
+    standart_file_path = cfg["file_path"]
+
     app = QApplication(sys.argv)
     window = Window()
+    window.setIcons()
     window.show()
     sys.exit(app.exec_())
 

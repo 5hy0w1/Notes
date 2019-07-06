@@ -8,6 +8,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("Notes - Заметки")
@@ -52,9 +54,9 @@ class Ui_MainWindow(object):
         self.new_button.setMaximumSize(QtCore.QSize(25, 25))
         self.new_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.new_button.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("/home/5hy0w1/notes/plus.png").scaled(20,20), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.new_button.setIcon(icon)
+        # #icon = QtGui.QIcon()
+        # #icon.addPixmap(QtGui.QPixmap("/home/5hy0w1/notes/plus.png").scaled(20,20), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # #self.new_button.setIcon(icon)
         self.new_button.setIconSize(QtCore.QSize(20, 20))
         self.new_button.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.new_button.setAutoRaise(True)
@@ -64,9 +66,9 @@ class Ui_MainWindow(object):
         self.del_button.setMaximumSize(QtCore.QSize(25, 25))
         self.del_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.del_button.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("/home/5hy0w1/notes/minus.png").scaled(20,20), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.del_button.setIcon(icon1)
+        # #icon1 = QtGui.QIcon()
+        # #icon1.addPixmap(QtGui.QPixmap("/home/5hy0w1/notes/minus.png").scaled(20,20), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # #self.del_button.setIcon(icon1)
         self.del_button.setIconSize(QtCore.QSize(20, 20))
         self.del_button.setAutoRaise(True)
         self.del_button.setObjectName("del_button")
@@ -80,11 +82,11 @@ class Ui_MainWindow(object):
         self.toolBar.setObjectName("toolBar")
         # # Paragraph settings
         self.alignLeftButton = QtWidgets.QToolButton()
-        self.alignLeftButton.setText("L")
+        # #self.alignLeftButton.setIcon(QtGui.QIcon("./left-alignment.png"))
         self.alignRightButton = QtWidgets.QToolButton()
-        self.alignRightButton.setText("R")
+        # #self.alignRightButton.setIcon(QtGui.QIcon("./right-alignment.png"))
         self.alignCenterButton = QtWidgets.QToolButton()
-        self.alignCenterButton.setText("C")
+        # #self.alignCenterButton.setIcon(QtGui.QIcon("./center-alignment.png"))
         self.alignLeftButton.setCheckable(True)
         self.alignRightButton.setCheckable(True)
         self.alignCenterButton.setCheckable(True)
